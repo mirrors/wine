@@ -740,9 +740,10 @@ typedef struct
     mem_size_t     stack_commit;
     unsigned int   zerobits;
     unsigned int   subsystem;
-    unsigned short subsystem_low;
-    unsigned short subsystem_high;
-    unsigned int   gp;
+    unsigned short subsystem_minor;
+    unsigned short subsystem_major;
+    unsigned short osversion_major;
+    unsigned short osversion_minor;
     unsigned short image_charact;
     unsigned short dll_charact;
     unsigned short machine;
@@ -760,6 +761,7 @@ typedef struct
 #define IMAGE_FLAGS_ImageDynamicallyRelocated 0x04
 #define IMAGE_FLAGS_ImageMappedFlat           0x08
 #define IMAGE_FLAGS_BaseBelow4gb              0x10
+#define IMAGE_FLAGS_ComPlusPrefer32bit        0x20
 #define IMAGE_FLAGS_WineBuiltin               0x40
 #define IMAGE_FLAGS_WineFakeDll               0x80
 
@@ -792,7 +794,6 @@ struct new_process_request
     int          inherit_all;
     unsigned int create_flags;
     int          socket_fd;
-    obj_handle_t exe_file;
     unsigned int access;
     client_cpu_t cpu;
     data_size_t  info_size;
@@ -801,7 +802,6 @@ struct new_process_request
     /* VARARG(handles,uints,handles_size); */
     /* VARARG(info,startup_info,info_size); */
     /* VARARG(env,unicode_str); */
-    char __pad_52[4];
 };
 struct new_process_reply
 {
@@ -1901,6 +1901,7 @@ struct map_view_request
     client_ptr_t base;
     mem_size_t   size;
     file_pos_t   start;
+    /* VARARG(image,pe_image_info); */
 };
 struct map_view_reply
 {
@@ -6188,7 +6189,7 @@ union generic_reply
 
 /* ### protocol_version begin ### */
 
-#define SERVER_PROTOCOL_VERSION 652
+#define SERVER_PROTOCOL_VERSION 655
 
 /* ### protocol_version end ### */
 

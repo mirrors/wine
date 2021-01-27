@@ -1255,12 +1255,14 @@ static void dump_varargs_pe_image_info( const char *prefix, data_size_t size )
     dump_uint64( ",map_size=", &info.map_size );
     dump_uint64( ",stack_size=", &info.stack_size );
     dump_uint64( ",stack_commit=", &info.stack_commit );
-    fprintf( stderr, ",zerobits=%08x,subsystem=%08x,subsystem_low=%04x,subsystem_high=%04x,gp=%08x"
-             ",image_charact=%04x,dll_charact=%04x,machine=%04x,contains_code=%u,image_flags=%02x"
+    fprintf( stderr, ",zerobits=%08x,subsystem=%08x,subsystem_minor=%04x,subsystem_major=%04x"
+             ",osversion_major=%04x,osversion_minor=%04x,image_charact=%04x,dll_charact=%04x,machine=%04x"
+             ",contains_code=%u,image_flags=%02x"
              ",loader_flags=%08x,header_size=%08x,file_size=%08x,checksum=%08x",
-             info.zerobits, info.subsystem, info.subsystem_low, info.subsystem_high, info.gp,
-             info.image_charact, info.dll_charact, info.machine, info.contains_code, info.image_flags,
-             info.loader_flags, info.header_size, info.file_size, info.checksum );
+             info.zerobits, info.subsystem, info.subsystem_minor, info.subsystem_major,
+             info.osversion_major, info.osversion_minor, info.image_charact, info.dll_charact,
+             info.machine, info.contains_code, info.image_flags, info.loader_flags,
+             info.header_size, info.file_size, info.checksum );
     dump_client_cpu( ",cpu=", &info.cpu );
     fputc( '}', stderr );
     remove_data( size );
@@ -1312,7 +1314,6 @@ static void dump_new_process_request( const struct new_process_request *req )
     fprintf( stderr, ", inherit_all=%d", req->inherit_all );
     fprintf( stderr, ", create_flags=%08x", req->create_flags );
     fprintf( stderr, ", socket_fd=%d", req->socket_fd );
-    fprintf( stderr, ", exe_file=%04x", req->exe_file );
     fprintf( stderr, ", access=%08x", req->access );
     dump_client_cpu( ", cpu=", &req->cpu );
     fprintf( stderr, ", info_size=%u", req->info_size );
@@ -2105,6 +2106,7 @@ static void dump_map_view_request( const struct map_view_request *req )
     dump_uint64( ", base=", &req->base );
     dump_uint64( ", size=", &req->size );
     dump_uint64( ", start=", &req->start );
+    dump_varargs_pe_image_info( ", image=", cur_size );
 }
 
 static void dump_unmap_view_request( const struct unmap_view_request *req )

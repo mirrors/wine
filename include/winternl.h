@@ -199,6 +199,11 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS
     UNICODE_STRING      ShellInfo;
     UNICODE_STRING      RuntimeInfo;
     RTL_DRIVE_LETTER_CURDIR DLCurrentDirectory[0x20];
+    ULONG               EnvironmentSize;
+    ULONG               EnvironmentVersion;
+    PVOID               PackageDependencyData;
+    ULONG               ProcessGroupId;
+    ULONG               LoaderThreads;
 } RTL_USER_PROCESS_PARAMETERS, *PRTL_USER_PROCESS_PARAMETERS;
 
 /* value for Flags field (FIXME: not the correct name) */
@@ -2409,6 +2414,9 @@ typedef enum _SECTION_INFORMATION_CLASS
 {
   SectionBasicInformation,
   SectionImageInformation,
+  SectionRelocationInformation,
+  SectionOriginalBaseInformation,
+  SectionInternalImageInformation
 } SECTION_INFORMATION_CLASS;
 
 typedef struct _SECTION_BASIC_INFORMATION {
@@ -2423,9 +2431,10 @@ typedef struct _SECTION_IMAGE_INFORMATION {
   SIZE_T MaximumStackSize;
   SIZE_T CommittedStackSize;
   ULONG SubSystemType;
-  WORD SubsystemVersionLow;
-  WORD SubsystemVersionHigh;
-  ULONG GpValue;
+  USHORT MinorSubsystemVersion;
+  USHORT MajorSubsystemVersion;
+  USHORT MajorOperatingSystemVersion;
+  USHORT MinorOperatingSystemVersion;
   USHORT ImageCharacteristics;
   USHORT DllCharacteristics;
   USHORT Machine;
@@ -2440,7 +2449,8 @@ typedef struct _SECTION_IMAGE_INFORMATION {
           UCHAR ImageDynamicallyRelocated : 1;
           UCHAR ImageMappedFlat           : 1;
           UCHAR BaseBelow4gb              : 1;
-          UCHAR Reserved                  : 3;
+          UCHAR ComPlusPrefer32bit        : 1;
+          UCHAR Reserved                  : 2;
       } DUMMYSTRUCTNAME;
   } DUMMYUNIONNAME;
   ULONG LoaderFlags;

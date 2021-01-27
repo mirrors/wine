@@ -103,6 +103,7 @@ enum attr_type
     ATTR_ENCODE,
     ATTR_ENDPOINT,
     ATTR_ENTRY,
+    ATTR_EXCLUSIVETO,
     ATTR_EXPLICIT_HANDLE,
     ATTR_FAULTSTATUS,
     ATTR_FORCEALLOCATE,
@@ -125,6 +126,7 @@ enum attr_type
     ATTR_LIBLCID,
     ATTR_LICENSED,
     ATTR_LOCAL,
+    ATTR_MARSHALING_BEHAVIOR,
     ATTR_MAYBE,
     ATTR_MESSAGE,
     ATTR_NOCODE,
@@ -269,6 +271,14 @@ enum threading_type
     THREADING_SINGLE,
     THREADING_FREE,
     THREADING_BOTH
+};
+
+enum marshaling_type
+{
+    MARSHALING_INVALID = 0,
+    MARSHALING_NONE,
+    MARSHALING_AGILE,
+    MARSHALING_STANDARD,
 };
 
 enum type_basic_type
